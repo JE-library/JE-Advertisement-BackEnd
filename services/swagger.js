@@ -31,8 +31,8 @@ const doc = {
 All endpoints are secured and follow REST principles, making it easy to integrate with any frontend or mobile app.  
     `,
   },
-  //   host: "je-library-backend.onrender.com",
-  host: `localhost:${process.env.PORT}`,
+    host: "je-advertisement-backend.onrender.com",
+//   host: `localhost:${process.env.PORT}`,
   schemes: ["http", "https"],
 };
 
