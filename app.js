@@ -4,11 +4,14 @@ const connectDB = require("./configs/db.config");
 const authRoutes = require("./routes/auth.routes");
 const usersRoutes = require("./routes/users.routes");
 const vendorsRoutes = require("./routes/vendors.routes");
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("./services/swagger-output.json");
 require("dotenv").config();
 const app = express();
 // MIDDLEWARES
 app.use(express.json());
 app.use(cors());
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 //ROUTES
 app.use("/api/auth", authRoutes);
