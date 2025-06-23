@@ -28,7 +28,7 @@ const signUp = async (req, res) => {
         null,
         true
       );
-      res.status(400).json(message);
+      return res.status(400).json(message);
     }
 
     //creating new user
@@ -51,7 +51,7 @@ const signUp = async (req, res) => {
     });
     res.status(201).json(message);
     //Send email and forget
-    // await sendEmail({ username, email });
+    await sendEmail({ username, email });
   } catch (error) {
     console.log(error.message);
   }
@@ -88,17 +88,24 @@ const signIn = async (req, res) => {
       const message = errorResponse("Invalid credentials!", null, true);
       return res.status(400).json(message);
     }
+    //updating users role
+    if (role !== matchedUSer.role) {
+      await Users.updateOne(
+        { userID: matchedUSer.userID },
+        { $set: { role: role } }
+      );
+    }
     //generating token
     const userDetails = {
       userID: matchedUSer.userID,
-      role: matchedUSer.role,
+      role: role,
       username: matchedUSer.username,
       email: matchedUSer.email,
     };
     const token = jwt.sign(userDetails, process.env.JWT_SECRET_KEY);
     //sending token to client
     const message = successResponse(
-      `Hello ${usernameOrEmail}, you've successfully logged in.`,
+      `Hello ${usernameOrEmail}, you've successfully logged in as a ${role}.`,
       token
     );
     res.status(200).json(message);

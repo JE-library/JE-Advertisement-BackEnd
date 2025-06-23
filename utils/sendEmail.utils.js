@@ -19,7 +19,6 @@ const sendEmail = async (user) => {
       from: `"Test App" <JE-Advertisements@example.email>`,
       to: user.email,
       subject: "🎉 Welcome to JE-Advertisements",
-      text,
       html: `
       <!DOCTYPE html>
 <html lang="en">
