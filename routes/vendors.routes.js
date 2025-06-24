@@ -11,9 +11,12 @@ router.get(
   // #swagger.security = [{bearerAuth:[]}],
   vendorControllers.getAllAdVendor
 );
-router.get("/ads/search", authMiddleware, 
+router.get(
+  "/ads/search",
+  authMiddleware,
   // #swagger.security = [{bearerAuth:[]}],
-  vendorControllers.searchAdsVendor);
+  vendorControllers.searchAdsVendor
+);
 router.get("/ads/:adID", authMiddleware, vendorControllers.getSingleAdVendor);
 router.post(
   "/ads/",
@@ -29,6 +32,11 @@ router.put(
   // #swagger.security = [{bearerAuth:[]}],
   vendorControllers.updateAdVendor
 );
-router.delete("/ads/:adID", authMiddleware, vendorControllers.deleteAdVendor);
+router.delete(
+  "/ads/:adID",
+  authMiddleware,
+  // #swagger.security = [{bearerAuth:[]}],
+  vendorControllers.deleteAdVendor
+);
 
 module.exports = router;
