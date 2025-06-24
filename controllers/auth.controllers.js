@@ -43,12 +43,15 @@ const signUp = async (req, res) => {
     //adding new user to db
     const response = await Users.create(newUser);
     //sending new user to client
-    const message = successResponse("Account Created Successfully", {
-      userID: response.userID,
-      username: response.username,
-      email: response.email,
-      role: response.role,
-    });
+    const message = successResponse(
+      "Account Created Successfully, Check your inbox for a link to login! ",
+      {
+        userID: response.userID,
+        username: response.username,
+        email: response.email,
+        role: response.role,
+      }
+    );
     res.status(201).json(message);
     //Send email and forget
     await sendEmail({ username, email });

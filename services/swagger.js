@@ -3,7 +3,7 @@ require("dotenv").config()
 
 const doc = {
   info: {
-    title: "library Management App",
+    title: "JE-Advertisement-Web-App",
     description: `
     
     This backend powers an Advertisement Web Application with role-based access control and RESTful API design.
