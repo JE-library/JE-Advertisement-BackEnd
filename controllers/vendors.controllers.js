@@ -410,3 +410,12 @@ module.exports = {
   deleteAdVendor,
   addAdVendor,
 };
+
+const userDetails = 
+
+{
+  username: "MArk",
+  password: "hahah",
+  email: "mark@gmail.com",
+  role: "vendor",
+};

@@ -32,7 +32,7 @@ All endpoints are secured and follow REST principles, making it easy to integrat
     `,
   },
   host: "je-advertisement-backend.onrender.com",
-  //   host: `localhost:${process.env.PORT}`,
+    // host: `localhost:${process.env.PORT}`,
   schemes: ["https"],
   components: {
     securitySchemes: {
@@ -43,10 +43,10 @@ All endpoints are secured and follow REST principles, making it easy to integrat
       },
     },
   },
-  // security : [{bearerAuth:[]}],
+  // security: [{ bearerAuth: [] }],
 };
 
-const outputFile = "./swagger-output.json ";
+const outputFile = "./swagger-output.json";
 const routes = ["../app.js"];
 
 swaggerAutogen(outputFile, routes, doc);

@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const adSchema = new mongoose.Schema({
-  userID: { type: String, required: true, unique: true },
+  userID: { type: String, required: true },
   adID: { type: String, required: true, unique: true },
   title: { type: String, required: true },
   description: { type: String, required: true },
