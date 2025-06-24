@@ -1,5 +1,5 @@
 const swaggerAutogen = require("swagger-autogen")();
-require("dotenv").config()
+require("dotenv").config();
 
 const doc = {
   info: {
@@ -31,9 +31,19 @@ const doc = {
 All endpoints are secured and follow REST principles, making it easy to integrate with any frontend or mobile app.  
     `,
   },
-    host: "je-advertisement-backend.onrender.com",
-//   host: `localhost:${process.env.PORT}`,
+  host: "je-advertisement-backend.onrender.com",
+  //   host: `localhost:${process.env.PORT}`,
   schemes: ["http", "https"],
+  components: {
+    securitySchemes: {
+      bearerAuth: {
+        type: "http",
+        scheme: "bearer",
+        bearerFormat: "JWT",
+      },
+    },
+  },
+  // security : [{bearerAuth:[]}],
 };
 
 const outputFile = "./swagger-output.json ";

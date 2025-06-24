@@ -3,7 +3,8 @@ const { errorResponse, successResponse } = require("../utils/response");
 const cloudinary = require("../configs/cloudinary.config");
 const Images = require("../models/Image");
 const fs = require("fs/promises");
-const { title } = require("process");
+const { v4: uuidv4 } = require("uuid");
+const { addAdSchema } = require("../utils/joi.utils");
 
 //GETTING ALL ADS - VENDOR
 const getAllAdVendor = async (req, res) => {
@@ -188,6 +189,82 @@ const searchAdsVendor = async (req, res) => {
     console.log(error.message);
   }
 };
+///////////////////////////////////////////////////////////////////////////////////////
+//
+//ADING AN ADD - VENDOR
+const addAdVendor = async (req, res) => {
+  try {
+    const { title, description, category, price } = req.body;
+    const role = req.user.role;
+    const username = req.user.username;
+    const userID = req.user.userID;
+    if (role !== "vendor") {
+      const message = errorResponse(
+        `Hey ${username}, please login as a vendor to access this route.`,
+        null,
+        true
+      );
+      return res.status(401).json(message);
+    }
+    //validating fields with JOI
+    const { value, error } = addAdSchema.validate(req.body);
+    if (error) {
+      const message = errorResponse(
+        error.details[0].message,
+        value,
+        error.details[0]
+      );
+      return res.status(400).json(message);
+    }
+
+    //Generating new Ad ID
+    const adID = uuidv4();
+
+    //checking if there's A file
+    const file = req.file;
+    let imageMetada = {};
+    if (file) {
+      // uploading file to cloudinary
+      const response = await cloudinary.uploader.upload(file.path);
+      imageMetada = {
+        userID,
+        adID,
+        public_id: response.public_id,
+        url: response.secure_url,
+        name: response.original_filename,
+      };
+      //Adding image metadata to DB
+      await Images.create(imageMetada);
+      //deleting image from fs
+      await fs.unlink(req.file.path);
+    }
+
+    // creating a new Ad
+    const newAd = {
+      adID,
+      userID,
+      title,
+      description,
+      category,
+      price,
+      imageURL:
+        imageMetada.url ??
+        "https://ih1.redbubble.net/image.4905811472.8675/bg,f8f8f8-flat,750x,075,f-pad,750x1000,f8f8f8.jpg",
+    };
+    //Adding new Ad to DB
+    await Ads.create(newAd);
+
+    //sending new ad to client
+    const message = successResponse(
+      `Hey ${username}, your Ad was Updated successfully!.`,
+      newAd
+    );
+    return res.status(200).json(message);
+  } catch (error) {
+    console.log(error);
+  }
+};
+//
 //
 //
 //UPDATING AN ADD - VENDOR
@@ -331,4 +408,5 @@ module.exports = {
   searchAdsVendor,
   updateAdVendor,
   deleteAdVendor,
+  addAdVendor,
 };

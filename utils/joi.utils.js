@@ -18,7 +18,7 @@ const addAdSchema = joi.object({
   title: joi.string().required(),
   description: joi.string().required(),
   price: joi.string().required(),
-  category: joi.array().required(),
+  category: joi.string().required(),
 });
 
 module.exports = { signUpSchema, signInSchema, addAdSchema };
