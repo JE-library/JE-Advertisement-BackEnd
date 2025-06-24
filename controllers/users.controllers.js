@@ -8,12 +8,14 @@ const getAllAdUser = async (req, res) => {
     const role = req.user.role;
     const username = req.user.username;
     const userID = req.user.userID;
-    if (role !== "user") {
+    if (role !== "user" && role !== "vendor") {
       const message = errorResponse(
-        `Hey ${username}, please login as a user to access this route.`,
+        `Hey ${username}, please login to access this route.`,
         null,
         true
       );
+      console.log(role);
+
       res.status(401).json(message);
     }
     //getting all ads from DB
@@ -41,9 +43,9 @@ const getSingleAdUSer = async (req, res) => {
     const role = req.user.role;
     const username = req.user.username;
     const userID = req.user.userID;
-    if (role !== "user") {
+    if (role !== "user" && role !== "vendor") {
       const message = errorResponse(
-        `Hey ${username}, please login as a user to access this route.`,
+        `Hey ${username}, please login to access this route.`,
         null,
         true
       );
@@ -77,9 +79,9 @@ const searchAdsUSer = async (req, res) => {
     const role = req.user.role;
     const username = req.user.username;
     const userID = req.user.userID;
-    if (role !== "user") {
+    if (role !== "user" && role !== "vendor") {
       const message = errorResponse(
-        `Hey ${username}, please login as a user to access this route.`,
+        `Hey ${username}, please login to access this route.`,
         null,
         true
       );

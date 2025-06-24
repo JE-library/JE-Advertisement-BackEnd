@@ -5,13 +5,13 @@ const signUpSchema = joi.object({
   email: joi.string().required(),
   password: joi.string().required(),
   //   confirmPassword: joi.string().ref("password")
-  role: joi.string().required(),
+  role: joi.string().valid("user", "vendor").required(),
 });
 
 const signInSchema = joi.object({
   usernameOrEmail: joi.string().required(),
   password: joi.string().required(),
-  role: joi.string().required(),
+  // role: joi.string().required(),
 });
 
 const addAdSchema = joi.object({
