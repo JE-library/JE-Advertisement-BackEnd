@@ -17,7 +17,12 @@ router.get(
   // #swagger.security = [{bearerAuth:[]}],
   vendorControllers.searchAdsVendor
 );
-router.get("/ads/:adID", authMiddleware, vendorControllers.getSingleAdVendor);
+router.get(
+  "/ads/:adID",
+  authMiddleware,
+  // #swagger.security = [{bearerAuth:[]}],
+  vendorControllers.getSingleAdVendor
+);
 router.post(
   "/ads/",
   authMiddleware,
