@@ -11,7 +11,7 @@ const signUpSchema = joi.object({
 const signInSchema = joi.object({
   usernameOrEmail: joi.string().required(),
   password: joi.string().required(),
-  // role: joi.string().required(),
+  role: joi.string().valid("user", "vendor").required(),
 });
 
 const addAdSchema = joi.object({

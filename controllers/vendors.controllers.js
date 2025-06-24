@@ -191,7 +191,6 @@ const searchAdsVendor = async (req, res) => {
 //
 //
 //UPDATING AN ADD - VENDOR
-
 const updateAdVendor = async (req, res) => {
   try {
     const allNewAd = req.body;

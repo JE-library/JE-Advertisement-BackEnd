@@ -63,7 +63,7 @@ const signUp = async (req, res) => {
 //SIGNING IN
 const signIn = async (req, res) => {
   try {
-    const { usernameOrEmail, password } = req.body;
+    const { usernameOrEmail, password, role } = req.body;
     const { value, error } = signInSchema.validate(req.body);
     if (error) {
       const message = errorResponse(
@@ -100,16 +100,16 @@ const signIn = async (req, res) => {
     // }
     //generating token
     const userDetails = {
+      role,
       userID: matchedUSer.userID,
-      role: matchedUSer.role,
       username: matchedUSer.username,
       email: matchedUSer.email,
     };
     const token = jwt.sign(userDetails, process.env.JWT_SECRET_KEY);
     //sending token to client
     const message = successResponse(
-      `Hello ${usernameOrEmail}, you've successfully logged in as a ${matchedUSer.role}.`,
-      { role: matchedUSer.role, token }
+      `Hello ${usernameOrEmail}, you've successfully logged in as a ${role}.`,
+      { role, token }
     );
     res.status(200).json(message);
   } catch (error) {
