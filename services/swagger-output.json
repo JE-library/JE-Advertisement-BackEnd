@@ -8,7 +8,7 @@
   "host": "je-advertisement-backend.onrender.com",
   "basePath": "/",
   "schemes": [
-    "http"
+    "https"
   ],
   "paths": {
     "/api/auth/sign-up": {

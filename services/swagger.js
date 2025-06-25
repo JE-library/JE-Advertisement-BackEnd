@@ -33,7 +33,7 @@ All endpoints are secured and follow REST principles, making it easy to integrat
   },
   host: "je-advertisement-backend.onrender.com",
   // host: `localhost:${process.env.PORT}`,
-  schemes: ["http"],
+  schemes: ["https"],
   components: {
     securitySchemes: {
       bearerAuth: {
