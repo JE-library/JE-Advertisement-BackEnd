@@ -208,8 +208,6 @@ const addAdVendor = async (req, res) => {
       return res.status(401).json(message);
     }
     //validating fields with JOI
-    console.log(req.file);
-    console.log(req.body);
 
     const { value, error } = addAdSchema.validate(req.body);
     if (error) {
