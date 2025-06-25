@@ -28,6 +28,7 @@ router.post(
   authMiddleware,
   upload.single("file"),
   // #swagger.security = [{bearerAuth:[]}],
+  
   vendorControllers.addAdVendor
 );
 router.put(

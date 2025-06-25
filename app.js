@@ -9,7 +9,8 @@ const swaggerDocument = require("./services/swagger-output.json");
 require("dotenv").config();
 const app = express();
 // MIDDLEWARES
-app.use(express.json());
+app.use(express.json())
+// app.use(express.urlencoded({ extended: true })); // for form data
 app.use(cors());
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 

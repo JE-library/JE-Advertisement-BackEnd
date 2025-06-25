@@ -195,6 +195,7 @@ const searchAdsVendor = async (req, res) => {
 const addAdVendor = async (req, res) => {
   try {
     const { title, description, category, price } = req.body;
+
     const role = req.user.role;
     const username = req.user.username;
     const userID = req.user.userID;
@@ -207,6 +208,9 @@ const addAdVendor = async (req, res) => {
       return res.status(401).json(message);
     }
     //validating fields with JOI
+    console.log(req.file);
+    console.log(req.body);
+
     const { value, error } = addAdSchema.validate(req.body);
     if (error) {
       const message = errorResponse(
@@ -333,7 +337,7 @@ const updateAdVendor = async (req, res) => {
       userID,
       title: allNewAd.title ?? matchedAd.title,
       description: allNewAd.description ?? matchedAd.description,
-      category: allNewAd.category ?? matchedAd.description,
+      category: allNewAd.category ?? matchedAd.category,
       price: allNewAd.price ?? matchedAd.price,
       imageURL:
         imageMetada.url ??
@@ -409,13 +413,4 @@ module.exports = {
   updateAdVendor,
   deleteAdVendor,
   addAdVendor,
-};
-
-const userDetails = 
-
-{
-  username: "MArk",
-  password: "hahah",
-  email: "mark@gmail.com",
-  role: "vendor",
 };
