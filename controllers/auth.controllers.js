@@ -14,6 +14,7 @@ const signUp = async (req, res) => {
     const { value, error } = signUpSchema.validate(req.body);
     if (error) {
       const message = errorResponse(
+        username,
         error.details[0].message,
         value,
         error.details[0]
@@ -24,6 +25,7 @@ const signUp = async (req, res) => {
     const matchedUSer = await Users.findOne({ $or: [{ username }, { email }] });
     if (matchedUSer) {
       const message = errorResponse(
+        username,
         "Account with username / email already exists",
         null,
         true
@@ -44,6 +46,7 @@ const signUp = async (req, res) => {
     const response = await Users.create(newUser);
     //sending new user to client
     const message = successResponse(
+      username,
       "Account Created Successfully, Check your inbox for a link to login! ",
       {
         userID: response.userID,
@@ -67,6 +70,7 @@ const signIn = async (req, res) => {
     const { value, error } = signInSchema.validate(req.body);
     if (error) {
       const message = errorResponse(
+        usernameOrEmail,
         error.details[0].message,
         value,
         error.details[0]
@@ -81,14 +85,24 @@ const signIn = async (req, res) => {
       { _id: 0, __v: 0 }
     );
     if (!matchedUSer) {
-      const message = errorResponse("Invalid credentials!", null, true);
+      const message = errorResponse(
+        usernameOrEmail,
+        "Invalid credentials!",
+        null,
+        true
+      );
       return res.status(400).json(message);
     }
 
     //checking if passwords match
     const matchPassword = await bcrypt.compare(password, matchedUSer.password);
     if (!matchPassword) {
-      const message = errorResponse("Invalid credentials!", null, true);
+      const message = errorResponse(
+        usernameOrEmail,
+        "Invalid credentials!",
+        null,
+        true
+      );
       return res.status(400).json(message);
     }
     // //updating users role
@@ -108,6 +122,7 @@ const signIn = async (req, res) => {
     const token = jwt.sign(userDetails, process.env.JWT_SECRET_KEY);
     //sending token to client
     const message = successResponse(
+      matchedUSer.username,
       `Hello ${usernameOrEmail}, you've successfully logged in as a ${role}.`,
       { role, token }
     );

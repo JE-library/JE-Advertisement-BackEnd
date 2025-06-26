@@ -1,6 +1,7 @@
-const successResponse = (message, data) => {
+const successResponse = (username, message, data) => {
   const response = {
     success: true,
+    username,
     message: message,
     data: data,
     error: null,
@@ -9,9 +10,10 @@ const successResponse = (message, data) => {
   return response;
 };
 
-const errorResponse = (message, data, error) => {
+const errorResponse = (username, message, data, error) => {
   const response = {
     success: false,
+    username,
     message: message,
     data: data,
     error: error,

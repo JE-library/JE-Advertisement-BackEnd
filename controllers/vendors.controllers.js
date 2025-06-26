@@ -14,6 +14,7 @@ const getAllAdVendor = async (req, res) => {
     const userID = req.user.userID;
     if (role !== "vendor") {
       const message = errorResponse(
+        username,
         `Hey ${username}, please login as an vendor to access this route.`,
         null,
         true
@@ -24,6 +25,7 @@ const getAllAdVendor = async (req, res) => {
     const ads = await Ads.find({ userID }, { __id: 0, __v: 0 });
     if (ads.length === 0) {
       const message = successResponse(
+        username,
         `Sorry ${username}, You have no ads to be displayed.`,
         null
       );
@@ -31,6 +33,7 @@ const getAllAdVendor = async (req, res) => {
     }
     //sending ads to client
     const message = successResponse(
+      username,
       `Hey ${username}!, your Ads were retrieved successfully!.`,
       ads
     );
@@ -50,6 +53,7 @@ const getSingleAdVendor = async (req, res) => {
     const userID = req.user.userID;
     if (role !== "vendor") {
       const message = errorResponse(
+        username,
         `Hey ${username}, please login as a vendor to access this route.`,
         null,
         true
@@ -61,6 +65,7 @@ const getSingleAdVendor = async (req, res) => {
     const matchedAd = await Ads.findOne({ adID, userID }, { __id: 0, __v: 0 });
     if (!matchedAd) {
       const message = successResponse(
+        username,
         `Sorry ${username}, there's no ad matching the id - ${adID}.`,
         null
       );
@@ -68,6 +73,7 @@ const getSingleAdVendor = async (req, res) => {
     }
     //sending ads to client
     const message = successResponse(
+      username,
       `Hi ${username}, your Ad retrieved successfully!.`,
       matchedAd
     );
@@ -87,6 +93,7 @@ const searchAdsVendor = async (req, res) => {
     const userID = req.user.userID;
     if (role !== "vendor") {
       const message = errorResponse(
+        username,
         `Hey ${username}, please login as a vendor to access this route.`,
         null,
         true
@@ -107,6 +114,7 @@ const searchAdsVendor = async (req, res) => {
       //if no ads are found
       if (matchedAds.length === 0) {
         const message = successResponse(
+          username,
           `Sorry ${username}, you don't have an ad matching the title ${queryTitle}.`,
           null
         );
@@ -114,6 +122,7 @@ const searchAdsVendor = async (req, res) => {
       }
       //sending ads to client
       const message = successResponse(
+        username,
         `Hey ${username}, your Ads retrieved successfully!.`,
         matchedAds
       );
@@ -130,6 +139,7 @@ const searchAdsVendor = async (req, res) => {
       //if no ads are found
       if (matchedAds.length === 0) {
         const message = successResponse(
+          username,
           `Sorry ${username}, you don't have an ad matching the category ${queryCategory}.`,
           null
         );
@@ -137,6 +147,7 @@ const searchAdsVendor = async (req, res) => {
       }
       //sending ads to client
       const message = successResponse(
+        username,
         `Hey ${username}, your Ads retrieved successfully!.`,
         matchedAds
       );
@@ -152,6 +163,7 @@ const searchAdsVendor = async (req, res) => {
       //if no ads are found
       if (matchedAds.length === 0) {
         const message = successResponse(
+          username,
           `Sorry ${username}, you don't have an ad less than ${queryPrice}GHC.`,
           null
         );
@@ -159,6 +171,7 @@ const searchAdsVendor = async (req, res) => {
       }
       //sending ads to client
       const message = successResponse(
+        username,
         `Hey ${username}, your Ads retrieved successfully!.`,
         matchedAds
       );
@@ -173,6 +186,7 @@ const searchAdsVendor = async (req, res) => {
       //if no ads are found
       if (matchedAds.length === 0) {
         const message = successResponse(
+          username,
           `Sorry ${username},you don't have an  ad greater than ${queryPrice}GHC.`,
           null
         );
@@ -180,11 +194,30 @@ const searchAdsVendor = async (req, res) => {
       }
       //sending ads to client
       const message = successResponse(
+        username,
         `Hey ${username}, your Ads retrieved successfully!.`,
         matchedAds
       );
       return res.status(200).json(message);
     }
+    // else send all adds
+    //getting all ads from DB
+    const ads = await Ads.find({}, { __id: 0, __v: 0 });
+    if (ads.length === 0) {
+      const message = successResponse(
+        username,
+        `Sorry ${username}, there's no ads to be displayed.`,
+        null
+      );
+      return res.status(200).json(message);
+    }
+    //sending ads to client
+    const message = successResponse(
+      username,
+      `Ads retrieved successfully!.`,
+      ads
+    );
+    return res.status(200).json(message);
   } catch (error) {
     console.log(error.message);
   }
@@ -201,6 +234,7 @@ const addAdVendor = async (req, res) => {
     const userID = req.user.userID;
     if (role !== "vendor") {
       const message = errorResponse(
+        username,
         `Hey ${username}, please login as a vendor to access this route.`,
         null,
         true
@@ -212,6 +246,7 @@ const addAdVendor = async (req, res) => {
     const { value, error } = addAdSchema.validate(req.body);
     if (error) {
       const message = errorResponse(
+        username,
         error.details[0].message,
         value,
         error.details[0]
@@ -258,6 +293,7 @@ const addAdVendor = async (req, res) => {
 
     //sending new ad to client
     const message = successResponse(
+      username,
       `Hey ${username}, your Ad was Updated successfully!.`,
       newAd
     );
@@ -279,6 +315,7 @@ const updateAdVendor = async (req, res) => {
     const userID = req.user.userID;
     if (role !== "vendor") {
       const message = errorResponse(
+        username,
         `Hey ${username}, please login as a vendor to access this route.`,
         null,
         true
@@ -290,6 +327,7 @@ const updateAdVendor = async (req, res) => {
     const matchedAd = await Ads.findOne({ adID, userID }, { __id: 0, __v: 0 });
     if (!matchedAd) {
       const message = successResponse(
+        username,
         `Sorry ${username}, there's no ad matching the id - ${adID}.`,
         null
       );
@@ -337,8 +375,7 @@ const updateAdVendor = async (req, res) => {
       description: allNewAd.description ?? matchedAd.description,
       category: allNewAd.category ?? matchedAd.category,
       price: allNewAd.price ?? matchedAd.price,
-      imageURL:
-        imageMetada.url ?? matchedAd.imageURL,
+      imageURL: imageMetada.url ?? matchedAd.imageURL,
     };
     const response = await Ads.updateOne(
       { userID, adID },
@@ -347,6 +384,7 @@ const updateAdVendor = async (req, res) => {
 
     //sending new ad to client
     const message = successResponse(
+      username,
       `Hey ${username}, your Ad was Updated successfully!.`,
       response
     );
@@ -366,6 +404,7 @@ const deleteAdVendor = async (req, res) => {
     const userID = req.user.userID;
     if (role !== "vendor") {
       const message = errorResponse(
+        username,
         `Hey ${username}, please login as a vendor to access this route.`,
         null,
         true
@@ -377,6 +416,7 @@ const deleteAdVendor = async (req, res) => {
     const matchedAd = await Ads.findOne({ adID, userID }, { __id: 0, __v: 0 });
     if (!matchedAd) {
       const message = successResponse(
+        username,
         `Sorry ${username}, there's no ad matching the id - ${adID}.`,
         null
       );
@@ -394,6 +434,7 @@ const deleteAdVendor = async (req, res) => {
     }
     //sending response to client
     const message = successResponse(
+      username,
       `Hey ${username}, your Ad was Deleted successfully!.`,
       response
     );
