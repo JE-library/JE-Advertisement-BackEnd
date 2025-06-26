@@ -86,7 +86,7 @@ const getSingleAdUSer = async (req, res) => {
 //
 //
 //SEARCHING FOR AN AD
-const searchAdsVendor = async (req, res) => {
+const searchAdsUSer = async (req, res) => {
   try {
     const role = req.user.role;
     const username = req.user.username;
