@@ -173,7 +173,7 @@ a {
         </div>
 
         <p>Start exploring or managing your adverts below:</p>
-        <a href="https://je-adverts.netlify.app" target="_blank" class="button"
+        <a href="https://je-advertss.netlify.app" target="_blank" class="button"
           >Go to Your Dashboard</a
         >
       </div>
