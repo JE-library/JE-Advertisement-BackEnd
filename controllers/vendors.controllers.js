@@ -85,82 +85,143 @@ const getSingleAdVendor = async (req, res) => {
 //
 //
 //
-//
-//
-//
-//
+//SEARCHING FOR AN AD - VENDOR
 const searchAdsVendor = async (req, res) => {
   try {
     const role = req.user.role;
     const username = req.user.username;
     const userID = req.user.userID;
-
     if (role !== "vendor") {
-      return res
-        .status(401)
-        .json(
-          errorResponse(
-            username,
-            `Hey ${username}, please login as a vendor to access this route.`,
-            null,
-            true
-          )
-        );
-    }
-
-    const { title, category, price } = req.query;
-
-    const query = { userID };
-
-    if (title) {
-      query.title = { $regex: title.trim(), $options: "i" };
-    }
-
-    if (category) {
-      query.category = { $in: [category.trim()] };
-    }
-
-    if (price) {
-      const priceVal = parseFloat(price);
-      if (priceVal >= 500) {
-        query.price = { $gte: priceVal };
-      } else {
-        query.price = { $lte: priceVal };
-      }
-    }
-
-    const matchedAds = await Ads.find(query);
-
-    if (matchedAds.length === 0) {
-      return res
-        .status(200)
-        .json(
-          successResponse(
-            username,
-            `Sorry ${username}, no ads found matching the provided criteria.`,
-            null
-          )
-        );
-    }
-
-    return res
-      .status(200)
-      .json(
-        successResponse(
-          username,
-          `Hey ${username}, your Ads retrieved successfully!.`,
-          matchedAds
-        )
+      const message = errorResponse(
+        username,
+        `Hey ${username}, please login as a vendor to access this route.`,
+        null,
+        true
       );
+      return res.status(401).json(message);
+    }
+    // getting all from querys
+    const queryTitle = req.query.title;
+    const queryCategory = req.query.category;
+    const queryPrice = req.query.price;
+    // finding ads by title
+    if (queryTitle) {
+      queryTitle.trim();
+      const matchedAds = await Ads.find({
+        title: { $regex: queryTitle, $options: "i" }, //REGULAR EXPRESSION ("i"-case incensitive)
+        userID: userID,
+      });
+      //if no ads are found
+      if (matchedAds.length === 0) {
+        const message = successResponse(
+          username,
+          `Sorry ${username}, you don't have an ad matching the title ${queryTitle}.`,
+          null
+        );
+        return res.status(200).json(message);
+      }
+      //sending ads to client
+      const message = successResponse(
+        username,
+        `Hey ${username}, your Ads retrieved successfully!.`,
+        matchedAds
+      );
+      return res.status(200).json(message);
+    }
+    //
+    // filtering ads by category
+    if (queryCategory) {
+      queryCategory.trim();
+      const matchedAds = await Ads.find({
+        category: { $in: [queryCategory] },
+        userID: userID,
+      });
+      //if no ads are found
+      if (matchedAds.length === 0) {
+        const message = successResponse(
+          username,
+          `Sorry ${username}, you don't have an ad matching the category ${queryCategory}.`,
+          null
+        );
+        return res.status(200).json(message);
+      }
+      //sending ads to client
+      const message = successResponse(
+        username,
+        `Hey ${username}, your Ads retrieved successfully!.`,
+        matchedAds
+      );
+      return res.status(200).json(message);
+    }
+    //
+    // filtering ads by price
+    if (queryPrice < 1000) {
+      const matchedAds = await Ads.find({
+        price: { $lte: queryPrice },
+        userID: userID,
+      });
+      //if no ads are found
+      if (matchedAds.length === 0) {
+        const message = successResponse(
+          username,
+          `Sorry ${username}, you don't have an ad less than ${queryPrice}GHC.`,
+          null
+        );
+        return res.status(200).json(message);
+      }
+      //sending ads to client
+      const message = successResponse(
+        username,
+        `Hey ${username}, your Ads retrieved successfully!.`,
+        matchedAds
+      );
+      return res.status(200).json(message);
+    }
+    //IF the price exceeds 1000
+    else if (queryPrice >= 1000) {
+      const matchedAds = await Ads.find({
+        price: { $gte: queryPrice },
+        userID: userID,
+      });
+      //if no ads are found
+      if (matchedAds.length === 0) {
+        const message = successResponse(
+          username,
+          `Sorry ${username},you don't have an  ad greater than ${queryPrice}GHC.`,
+          null
+        );
+        return res.status(200).json(message);
+      }
+      //sending ads to client
+      const message = successResponse(
+        username,
+        `Hey ${username}, your Ads retrieved successfully!.`,
+        matchedAds
+      );
+      return res.status(200).json(message);
+    }
+    // else send all adds
+    //getting all ads from DB
+    const ads = await Ads.find({}, { __id: 0, __v: 0 });
+    if (ads.length === 0) {
+      const message = successResponse(
+        username,
+        `Sorry ${username}, there's no ads to be displayed.`,
+        null
+      );
+      return res.status(200).json(message);
+    }
+    //sending ads to client
+    const message = successResponse(
+      username,
+      `Ads retrieved successfully!.`,
+      ads
+    );
+    return res.status(200).json(message);
   } catch (error) {
-    console.error("Search Error:", error);
-    return res.status(500).json({
-      message: "Server error while searching ads.",
-      error: error.message,
-    });
+    console.log(error.message);
   }
 };
-
 ///////////////////////////////////////////////////////////////////////////////////////
 //
 //ADING AN ADD - VENDOR
