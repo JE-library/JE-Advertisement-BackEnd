@@ -107,7 +107,7 @@ const searchAdsUSer = async (req, res) => {
 
     const { title, category, price } = req.query;
 
-    const query = { userID };
+    const query = {};
 
     if (title) {
       query.title = { $regex: title.trim(), $options: "i" };
