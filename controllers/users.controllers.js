@@ -82,8 +82,8 @@ const getSingleAdUSer = async (req, res) => {
     console.log(error.message);
   }
 };
-//
-//
+///
+///
 //
 //SEARCHING FOR AN AD
 const searchAdsUSer = async (req, res) => {
