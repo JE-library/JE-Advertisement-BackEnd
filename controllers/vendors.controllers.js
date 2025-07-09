@@ -262,7 +262,9 @@ const addAdVendor = async (req, res) => {
     let imageMetada = {};
     if (file) {
       // uploading file to cloudinary
-      const response = await cloudinary.uploader.upload(file.path);
+      const response = await cloudinary.uploader.upload(file.path, {
+        folder: "JE-Adverts/Ads",
+      });
       imageMetada = {
         userID,
         adID,
